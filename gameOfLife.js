@@ -35,4 +35,4 @@ export function markTile(tile) {
         return tile.status = TILE_STATUSES.ALIVE;
 
     return tile.status = TILE_STATUSES.DEAD;
-  }
+}

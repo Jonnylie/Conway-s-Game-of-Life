@@ -8,10 +8,22 @@ const BOARD_SIZE = 10;
 
 const boardElement = document.querySelector(".board");
 const startButton = document.querySelector(".start-btn")
+const stopButton = document.querySelector(".stop-btn")
 
 boardElement.style.setProperty("--size", BOARD_SIZE);
 const board = createBoard(BOARD_SIZE);
+
+let gameTimeOut;
 startButton.addEventListener('click', startGame)
+stopButton.addEventListener('click', stopGame)
+
+function startGameWithTimeout() {
+  gameTimeOut = setTimeout(startGame, 1000)
+}
+
+function stopGame() {
+  clearTimeout(gameTimeOut);
+}
 
 board.forEach((row) =>
   row.forEach((tile) => {
@@ -37,29 +49,36 @@ export function nearbyAliveCells(board, { x, y }) {
   return aliveCells;
 }
 
+function nextIteration(nextIterationChanges) {
+  nextIterationChanges.forEach(({tile, status}) => {
+    board[tile.x][tile.y].status = status
+  })
+  if (!nextIterationChanges)
+    return;
+  startGameWithTimeout();
+}
+
 function startGame(){
-  const nextIteration = []
+  const nextIterationChanges = []
   board.forEach((row) => {
     row.forEach((tile) => {
       const adjacentAliveCells = nearbyAliveCells(board, tile)
       if (tile.status === TILE_STATUSES.DEAD && adjacentAliveCells.length === 3){
-        nextIteration.push({
+        nextIterationChanges.push({
           tile: tile,
           status: TILE_STATUSES.ALIVE
         })
       }
 
       if (tile.status === TILE_STATUSES.ALIVE && (adjacentAliveCells.length < 2 || adjacentAliveCells.length > 3)){
-        nextIteration.push({
+        nextIterationChanges.push({
           tile: tile,
           status: TILE_STATUSES.DEAD
         })
       }
     });
   });
-  console.log(nextIteration)
-  nextIteration.forEach(({tile, status}) => {
-    board[tile.x][tile.y].status = status
-  })
+  console.log(nextIterationChanges)
+  nextIteration(nextIterationChanges)
 }
 

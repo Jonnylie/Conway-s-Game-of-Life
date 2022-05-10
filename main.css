@@ -2,6 +2,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    height: 100%;
 }
 
 body {
@@ -15,8 +16,16 @@ body {
     color: white;   
 }
 
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .board {
     display: inline-grid;
+    height:fit-content;
     padding: 10px;
     grid-template-columns: repeat(var(--size), 60px);
     grid-template-rows: repeat(var(--size), 60px);
@@ -42,4 +51,22 @@ body {
 .board > [data-status="alive"] {
     background-color: black;
     cursor: pointer;
+}
+
+.btn-container {
+    display: flex;
+    gap: 10px;
+    margin: 10px;
+    height: fit-content;
+}
+
+button {
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: cadetblue;
+    color: white;
+    font-size: 20px;
+    font-weight: normal;
+    line-height: 1.4;
+    border: none;
 }
